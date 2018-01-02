@@ -1,0 +1,14 @@
+<h1>Follow Vino Friends!</h1>
+
+
+<%= form_tag(users_path, :method => "get", id: "search-form") do %>
+    <label> Search by Username</label><br>
+    <%= text_field_tag :search, params[:search], placeholder: "Search by Username" %>
+    <%= submit_tag "Search", :name => nil %>
+<% end %>
+
+<ul><% @users.each do |user| %>
+  <%if user != @user  %>
+  <li><%= link_to user.name, user %></li>
+  <% end %>
+<% end %></ul>

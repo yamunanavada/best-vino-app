@@ -1,0 +1,28 @@
+<% if flash[:error] %>
+  <ul><% flash[:error].each do |error| %>
+    <li><%= error %></li>
+  <% end %></ul>
+<% end %>
+
+
+<%= form_for @recipe do |f| %>
+  <p><%= f.label :name %><br>
+  <%= f.text_field :name %><br></p>
+  <p><%= f.label :"Diffculty Level" %><br>
+  <%= f.select( :difficult_level, @difficult ) %><br></p>
+  <p><%= f.label :"Total Cost"%><br>
+  <%= f.number_field :cost %><br></p>
+  <p><strong><%= f.label :"Select Vinos To Pair:" %></strong></p>
+  <%= f.collection_check_boxes :wine_ids, @wines, :id, :name %><br>
+  <p><strong><%= f.label :"Add a new vino:" %></strong></p>
+  <%= f.fields_for :wines, @recipe.wines.build do |wines_fields| %>
+    <%= wines_fields.text_field :name, placeholder: "Name" %>
+    <%= wines_fields.number_field :year, placeholder: "Year"%>
+    <%= wines_fields.text_field :country, placeholder: "Country" %>
+    <%= wines_fields.number_field :price, placeholder: "Price" %>
+  <% end %><br>
+
+
+
+  <%= f.submit %><br>
+<% end %>

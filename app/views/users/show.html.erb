@@ -1,0 +1,31 @@
+<h3><%= flash[:msg] %></h3>
+
+<h1><%= @user.name %></h1>
+
+<p><strong> Username: </strong> <%=@user.username %></p>
+<p><strong> Birthday: </strong><%=@user.birthday.strftime("%B %d, %Y")%></p>
+
+<p><strong>My Saved Vinos: </strong>
+  <% if @user.wines == [] %>
+    No Saved Wines
+  <% else %>
+    <ul><% @user.wines.each do |wine| %>
+      <li><%= link_to wine.name, wine %> </li>
+    <% end %> </ul>
+  <% end %></p>
+
+<p><strong>Vino Friends: </strong>
+<% if @user.friends == [] %>
+  No Friends (womp womp)
+<% else %>
+  <ul><% @user.friends.each do |friend| %>
+    <li><%= link_to friend.name, friend %> </li>
+  <% end %> </ul>
+<% end %></p>
+
+
+<% if !@current_user.friendships.find_by(friend: @user) && @user != @current_user %>
+  <%= link_to "Add Friend", friendships_path(friend_id: @user.id), method: :post %>
+<% elsif @current_user.friendships.find_by(friend: @user) && @user != @current_user %>
+  <%=link_to "Delete Friend", delete_friendship_path(@user), method: :delete %>
+<% end %>

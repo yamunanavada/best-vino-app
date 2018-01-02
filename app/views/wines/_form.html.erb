@@ -1,0 +1,36 @@
+<% if flash[:error] %>
+  <ul><% flash[:error].each do |error| %>
+    <li><%= error %></li>
+  <% end %></ul>
+<% end %>
+
+<%= form_for @wine do |f| %>
+  <p><%= f.label :name %>: <%= f.text_field :name %><br></p>
+  <p><%= f.label :year %>: <%= f.number_field :year %><br></p>
+  <p><%= f.label :country%>: <%= f.text_field :country %><br></p>
+  <p><%= f.label :price %>: <%= f.number_field :price %><br></p>
+
+
+<p><%= f.label :"Your Rating" %>:
+    <%= f.fields_for :user_wines, @wine.user_wines.build do |wines_field| %>
+    <%= wines_field.number_field :rating %>
+    <%= wines_field.hidden_field :user_id, value: @user.id %>
+    <% end %><br></p>
+
+  <p><strong><%= f.label :"Select recipes to pair with wine:" %></strong></p>
+  <%= f.collection_check_boxes :recipe_ids, @recipes, :id, :name do |b|%>
+    <span>
+      <%= b.check_box %>
+      <%= b.label %><br>
+    </span>
+    <% end %>
+
+  <p><strong><%= f.label :"Add a new recipe:" %></strong></p>
+  <%= f.fields_for :recipes, @wine.recipes.build do |recipes_fields| %>
+    <%= recipes_fields.text_field :name, placeholder: "Name" %>
+    <%= recipes_fields.text_field :difficult_level, placeholder: "Diffulty Level"%>
+    <%= recipes_fields.number_field :cost, placeholder: "Total Cost" %>
+  <% end %><br>
+
+  <p><%= f.submit %></p>
+<% end %>

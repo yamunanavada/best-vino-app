@@ -1,0 +1,30 @@
+<%if flash[:notice] %>
+  <%= flash[:notice] %>
+<% end %>
+
+<h1><%= @wine.name %></h1>
+
+<p><strong>Country: </strong><%=@wine.country%></p>
+<p><strong>Year: </strong><%=@wine.year%></p>
+<p><strong>Price per Bottle: </strong>$<%=@wine.price%></p>
+<p><strong>Average Rating: </strong><%=@rating%></p>
+<p><strong>Your Rating: </strong><%=@user_rating%></p>
+
+
+<p><strong> Recipes to go with this vino: </strong></p>
+
+<ul> <% @wine.recipes.each do |recipe| %>
+  <li><%= link_to recipe.name, recipe%> </li>
+<% end %> </ul>
+<% if !@user.user_wines.find_by(wine: @wine) %>
+  <p>Do you want to save this wine?</p>
+  <%= form_for @userwine do |f| %>
+    <%= f.hidden_field :wine_id, value: @wine.id %>
+     <%= f.number_field :rating, placeholder: "Your Rating (1-5)" %>
+     <%= f.submit :"Yes, I want to save this wine" %>
+    <% end %>
+  <!-- <p><%=link_to "Yes!", user_wines_path(wine_id: @wine.id), method: :post%></p> -->
+<% else %>
+  <p> Do you want to delete this wine from your list? <%=link_to "Yes!", delete_user_wine_path(wine_id: @wine.id), method: :delete%></p>
+  <%= link_to "Edit This Vino", edit_wine_path(@wine) %>
+<%end %>
